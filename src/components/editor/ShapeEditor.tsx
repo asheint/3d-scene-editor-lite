@@ -1,29 +1,46 @@
-import type { SceneObject } from '../../App'
+import type { SceneObject } from "../../App";
 
 interface ObjectsEditorProps {
-  onAddObject: (type: 'cube' | 'sphere') => void
-  selectedObject: SceneObject | undefined
-  onMoveObject: (direction: 'left' | 'right' | 'forward' | 'backward' | 'up' | 'down') => void
+  onAddObject: (type: "cube" | "sphere") => void;
+  selectedObject: SceneObject | undefined;
+
+  onMoveObject: (
+    direction: "left" | "right" | "forward" | "backward" | "up" | "down"
+  ) => void;
+
+  onRotateObject: (
+    axis: "x" | "y" | "z",
+    direction: "positive" | "negative"
+  ) => void;
 }
 
-export default function ObjectsEditor({ onAddObject, selectedObject, onMoveObject }: ObjectsEditorProps) {
+export default function ObjectsEditor({
+  onAddObject,
+  selectedObject,
+  onMoveObject,
+  onRotateObject,
+}: ObjectsEditorProps) {
   const handleAddCube = () => {
-    onAddObject('cube')
-  }
+    onAddObject("cube");
+  };
 
   const handleAddSphere = () => {
-    onAddObject('sphere')
-  }
+    onAddObject("sphere");
+  };
+
+  const radiansToDegrees = (radians: number) => {
+    return ((radians * 180) / Math.PI).toFixed(0);
+  };
 
   return (
     <div className="objects-editor">
       <h1>Objects Editor</h1>
-      
+
       <div className="add-objects-section">
         <h2>Add Objects</h2>
-        
+
         <div className="shapes-row">
-          <div 
+          <div
             className="shape-preview"
             onClick={handleAddCube}
             title="Add Cube"
@@ -31,8 +48,8 @@ export default function ObjectsEditor({ onAddObject, selectedObject, onMoveObjec
             <div className="shape-icon cube-icon"></div>
             <span>Cube</span>
           </div>
-          
-          <div 
+
+          <div
             className="shape-preview"
             onClick={handleAddSphere}
             title="Add Sphere"
@@ -43,75 +60,146 @@ export default function ObjectsEditor({ onAddObject, selectedObject, onMoveObjec
         </div>
       </div>
 
-      {/* UPDATED: Move Object Section with 3D controls */}
       <div className="move-object-section">
         <h2>Move Object</h2>
-        
+
         {selectedObject ? (
           <>
             <div className="selected-info">
               <p>Selected: {selectedObject.type}</p>
               <p className="position-info">
-                Position: ({selectedObject.position[0].toFixed(1)}, {selectedObject.position[1].toFixed(1)}, {selectedObject.position[2].toFixed(1)})
+                Position: ({selectedObject.position[0].toFixed(1)},{" "}
+                {selectedObject.position[1].toFixed(1)},{" "}
+                {selectedObject.position[2].toFixed(1)})
               </p>
             </div>
-            
+
             <div className="movement-controls">
-  <div className="movement-grid">
-    <button 
-      className="arrow-btn"
-      onClick={() => onMoveObject('left')}
-      title="Move Left (X-)"
-    >
-      ←
-    </button>
-    <span className="axis-label">X</span>
-    <button 
-      className="arrow-btn"
-      onClick={() => onMoveObject('right')}
-      title="Move Right (X+)"
-    >
-      →
-    </button>
-    
-    <button 
-      className="arrow-btn"
-      onClick={() => onMoveObject('down')}
-      title="Move Down (Y-)"
-    >
-      ⬇
-    </button>
-    <span className="axis-label">Y</span>
-    <button 
-      className="arrow-btn"
-      onClick={() => onMoveObject('up')}
-      title="Move Up (Y+)"
-    >
-      ⬆
-    </button>
-    
-    <button 
-      className="arrow-btn"
-      onClick={() => onMoveObject('forward')}
-      title="Move Forward (Z-)"
-    >
-      ↑
-    </button>
-    <span className="axis-label">Z</span>
-    <button 
-      className="arrow-btn"
-      onClick={() => onMoveObject('backward')}
-      title="Move Backward (Z+)"
-    >
-      ↓
-    </button>
-  </div>
-</div>
+              <div className="movement-grid">
+                <button
+                  className="arrow-btn"
+                  onClick={() => onMoveObject("left")}
+                  title="Move Left (X-)"
+                >
+                  ←
+                </button>
+                <span className="axis-label">X</span>
+                <button
+                  className="arrow-btn"
+                  onClick={() => onMoveObject("right")}
+                  title="Move Right (X+)"
+                >
+                  →
+                </button>
+
+                <button
+                  className="arrow-btn"
+                  onClick={() => onMoveObject("down")}
+                  title="Move Down (Y-)"
+                >
+                  ⬇
+                </button>
+                <span className="axis-label">Y</span>
+                <button
+                  className="arrow-btn"
+                  onClick={() => onMoveObject("up")}
+                  title="Move Up (Y+)"
+                >
+                  ⬆
+                </button>
+
+                <button
+                  className="arrow-btn"
+                  onClick={() => onMoveObject("forward")}
+                  title="Move Forward (Z-)"
+                >
+                  ↑
+                </button>
+                <span className="axis-label">Z</span>
+                <button
+                  className="arrow-btn"
+                  onClick={() => onMoveObject("backward")}
+                  title="Move Backward (Z+)"
+                >
+                  ↓
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="no-selection">Click on an object to select it</p>
+        )}
+      </div>
+
+      <div className="rotate-object-section">
+        <h2>Rotate Object</h2>
+
+        {selectedObject ? (
+          <>
+            <div className="selected-info">
+              <p className="rotation-info">
+                Rotation: ({radiansToDegrees(selectedObject.rotation[0])}°,{" "}
+                {radiansToDegrees(selectedObject.rotation[1])}°,{" "}
+                {radiansToDegrees(selectedObject.rotation[2])}°)
+              </p>
+            </div>
+
+            <div className="rotation-controls">
+              <div className="rotation-grid">
+                <button
+                  className="rotate-btn"
+                  onClick={() => onRotateObject("x", "negative")}
+                  title="Rotate X- (Pitch Down)"
+                >
+                  ↶
+                </button>
+                <span className="axis-label">X</span>
+                <button
+                  className="rotate-btn"
+                  onClick={() => onRotateObject("x", "positive")}
+                  title="Rotate X+ (Pitch Up)"
+                >
+                  ↷
+                </button>
+
+                <button
+                  className="rotate-btn"
+                  onClick={() => onRotateObject("y", "negative")}
+                  title="Rotate Y- (Turn Left)"
+                >
+                  ↶
+                </button>
+                <span className="axis-label">Y</span>
+                <button
+                  className="rotate-btn"
+                  onClick={() => onRotateObject("y", "positive")}
+                  title="Rotate Y+ (Turn Right)"
+                >
+                  ↷
+                </button>
+
+                <button
+                  className="rotate-btn"
+                  onClick={() => onRotateObject("z", "negative")}
+                  title="Rotate Z- (Roll Left)"
+                >
+                  ↶
+                </button>
+                <span className="axis-label">Z</span>
+                <button
+                  className="rotate-btn"
+                  onClick={() => onRotateObject("z", "positive")}
+                  title="Rotate Z+ (Roll Right)"
+                >
+                  ↷
+                </button>
+              </div>
+            </div>
           </>
         ) : (
           <p className="no-selection">Click on an object to select it</p>
         )}
       </div>
     </div>
-  )
+  );
 }

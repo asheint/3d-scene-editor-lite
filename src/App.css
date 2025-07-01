@@ -151,3 +151,54 @@
   color: #999;
   margin-top: 5px;
 }
+
+/* Rotate Object Section */
+
+.rotate-object-section {
+  margin-bottom: 30px;
+}
+
+.rotation-info {
+  font-size: 10px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.rotation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rotation-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+
+.rotate-btn {
+  width: 28px;
+  height: 28px;
+  background-color: #3c3c3c;
+  border: 2px solid #555;
+  border-radius: 4px;
+  color: #ff9800;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rotate-btn:hover {
+  background-color: #4c4c4c;
+  border-color: #ff9800;
+  transform: translateY(-1px);
+  color: #ffb74d;
+}
+
+.rotate-btn:active {
+  transform: translateY(0);
+}
