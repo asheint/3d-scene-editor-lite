@@ -120,6 +120,53 @@ function App() {
     console.log(`Rotated ${axis}-axis ${direction}`);
   };
 
+  const scaleSelectedObject = (
+    axis: "x" | "y" | "z",
+    direction: "increase" | "decrease"
+  ) => {
+    if (!selectedObjectId) {
+      console.log("No object selected!");
+      return;
+    }
+
+    const scaleStep = 0.1; // How much to scale each time
+
+    setSceneObjects((prev) =>
+      prev.map((obj) => {
+        if (obj.id === selectedObjectId) {
+          const newScale: [number, number, number] = [...obj.scale];
+
+          // Figure out which axis to scale (0=X, 1=Y, 2=Z)
+          let axisIndex: number;
+          if (axis === "x") {
+            axisIndex = 0;
+          } else if (axis === "y") {
+            axisIndex = 1;
+          } else {
+            axisIndex = 2;
+          }
+
+          // Increase or decrease the scale
+          if (direction === "increase") {
+            newScale[axisIndex] += scaleStep;
+          } else {
+            newScale[axisIndex] -= scaleStep;
+            // Don't let it go below 0.1 (too small)
+            if (newScale[axisIndex] < 0.1) {
+              newScale[axisIndex] = 0.1;
+            }
+          }
+
+          return { ...obj, scale: newScale };
+        }
+
+        return obj;
+      })
+    );
+
+    console.log(`Scaled ${axis}-axis ${direction}`);
+  };
+
   const selectedObject = sceneObjects.find(
     (obj) => obj.id === selectedObjectId
   );
@@ -136,6 +183,7 @@ function App() {
         selectedObject={selectedObject}
         onMoveObject={moveSelectedObject}
         onRotateObject={rotateSelectedObject}
+        onScaleObject={scaleSelectedObject}
       />
     </div>
   );

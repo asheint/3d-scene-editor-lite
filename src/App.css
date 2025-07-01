@@ -152,6 +152,10 @@
   margin-top: 5px;
 }
 
+.move-object-section {
+  margin-bottom: 30px;
+}
+
 /* Rotate Object Section */
 
 .rotate-object-section {
@@ -200,5 +204,56 @@
 }
 
 .rotate-btn:active {
+  transform: translateY(0);
+}
+
+/* Scale Object Section */
+
+.scale-object-section {
+  margin-bottom: 30px;
+}
+
+.scale-info {
+  font-size: 10px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.scale-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scale-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 4px;
+  align-items: center;
+}
+
+.scale-btn {
+  width: 28px;
+  height: 28px;
+  background-color: #3c3c3c;
+  border: 2px solid #555;
+  border-radius: 4px;
+  color: #4caf50; /* Green color to distinguish from move/rotate */
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scale-btn:hover {
+  background-color: #4c4c4c;
+  border-color: #4caf50;
+  transform: translateY(-1px);
+  color: #81c784; /* Lighter green on hover */
+}
+
+.scale-btn:active {
   transform: translateY(0);
 }

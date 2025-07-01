@@ -12,6 +12,11 @@ interface ObjectsEditorProps {
     axis: "x" | "y" | "z",
     direction: "positive" | "negative"
   ) => void;
+
+  onScaleObject: (
+    axis: "x" | "y" | "z",
+    direction: "increase" | "decrease"
+  ) => void;
 }
 
 export default function ObjectsEditor({
@@ -19,6 +24,7 @@ export default function ObjectsEditor({
   selectedObject,
   onMoveObject,
   onRotateObject,
+  onScaleObject,
 }: ObjectsEditorProps) {
   const handleAddCube = () => {
     onAddObject("cube");
@@ -192,6 +198,76 @@ export default function ObjectsEditor({
                   title="Rotate Z+ (Roll Right)"
                 >
                   ↷
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="no-selection">Click on an object to select it</p>
+        )}
+      </div>
+
+      <div className="scale-object-section">
+        <h2>Scale Object</h2>
+
+        {selectedObject ? (
+          <>
+            <div className="selected-info">
+              <p className="scale-info">
+                Scale: ({selectedObject.scale[0].toFixed(1)},{" "}
+                {selectedObject.scale[1].toFixed(1)},{" "}
+                {selectedObject.scale[2].toFixed(1)})
+              </p>
+            </div>
+
+            <div className="scale-controls">
+              <div className="scale-grid">
+                <button
+                  className="scale-btn"
+                  onClick={() => onScaleObject("x", "decrease")}
+                  title="Scale X- (Make Narrower)"
+                >
+                  ←
+                </button>
+                <span className="axis-label">X</span>
+                <button
+                  className="scale-btn"
+                  onClick={() => onScaleObject("x", "increase")}
+                  title="Scale X+ (Make Wider)"
+                >
+                  →
+                </button>
+
+                <button
+                  className="scale-btn"
+                  onClick={() => onScaleObject("y", "decrease")}
+                  title="Scale Y- (Make Shorter)"
+                >
+                  ↓
+                </button>
+                <span className="axis-label">Y</span>
+                <button
+                  className="scale-btn"
+                  onClick={() => onScaleObject("y", "increase")}
+                  title="Scale Y+ (Make Taller)"
+                >
+                  ↑
+                </button>
+
+                <button
+                  className="scale-btn"
+                  onClick={() => onScaleObject("z", "decrease")}
+                  title="Scale Z- (Make Thinner)"
+                >
+                  ↓
+                </button>
+                <span className="axis-label">Z</span>
+                <button
+                  className="scale-btn"
+                  onClick={() => onScaleObject("z", "increase")}
+                  title="Scale Z+ (Make Deeper)"
+                >
+                  ↑
                 </button>
               </div>
             </div>
