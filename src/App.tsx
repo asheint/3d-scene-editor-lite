@@ -172,31 +172,72 @@ function App() {
   );
 
   const saveScene = () => {
-    // Step 1: Convert our scene objects to JSON string
     const sceneData = {
-      version: "1.0", // Good practice to include version
-      timestamp: new Date().toISOString(), // When it was saved
-      objects: sceneObjects, // Our actual scene data
+      version: "1.0",
+      timestamp: new Date().toISOString(),
+      objects: sceneObjects,
     };
 
-    const jsonString = JSON.stringify(sceneData, null, 2); // The '2' makes it pretty/readable
+    const jsonString = JSON.stringify(sceneData, null, 2);
 
-    // Step 2: Create a downloadable file
     const blob = new Blob([jsonString], { type: "application/json" });
     const url = URL.createObjectURL(blob);
 
-    // Step 3: Create a temporary download link and click it
     const link = document.createElement("a");
     link.href = url;
-    link.download = `scene_${Date.now()}.json`; // Filename with timestamp
+    link.download = `scene_${Date.now()}.json`;
     document.body.appendChild(link);
     link.click();
 
-    // Step 4: Clean up
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
     console.log("Scene saved!", sceneData);
+  };
+
+  const loadScene = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
+
+    if (!file.name.toLowerCase().endsWith(".json")) {
+      alert("Please select a JSON file");
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      try {
+        const fileContent = e.target?.result as string;
+        const sceneData = JSON.parse(fileContent);
+
+        if (!sceneData.objects || !Array.isArray(sceneData.objects)) {
+          alert("Invalid scene file format");
+          return;
+        }
+
+        setSceneObjects(sceneData.objects);
+        setSelectedObjectId(null);
+
+        console.log("Scene loaded successfully!", sceneData);
+        alert(`Scene loaded! Found ${sceneData.objects.length} objects.`);
+      } catch (error) {
+        console.error("Error loading scene:", error);
+        alert(
+          "Error reading scene file. Please check if it's a valid JSON file."
+        );
+      }
+    };
+
+    reader.onerror = () => {
+      alert("Error reading file");
+    };
+
+    reader.readAsText(file);
   };
 
   return (
@@ -213,6 +254,7 @@ function App() {
         onRotateObject={rotateSelectedObject}
         onScaleObject={scaleSelectedObject}
         onSaveScene={saveScene}
+        onLoadScene={loadScene}
       />
     </div>
   );

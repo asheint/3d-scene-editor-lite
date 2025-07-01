@@ -19,6 +19,8 @@ interface ObjectsEditorProps {
   ) => void;
 
   onSaveScene: () => void;
+
+  onLoadScene: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function ObjectsEditor({
@@ -28,6 +30,7 @@ export default function ObjectsEditor({
   onRotateObject,
   onScaleObject,
   onSaveScene,
+  onLoadScene,
 }: ObjectsEditorProps) {
   const handleAddCube = () => {
     onAddObject("cube");
@@ -44,6 +47,21 @@ export default function ObjectsEditor({
   return (
     <div className="objects-editor">
       <h1>Objects Editor</h1>
+
+      <div className="load-scene-section">
+        <div className="load-controls">
+          <label htmlFor="load-scene-input" className="load-btn">
+            📁 Load Scene
+            <input
+              id="load-scene-input"
+              type="file"
+              accept=".json"
+              onChange={onLoadScene}
+              style={{ display: "none" }}
+            />
+          </label>
+        </div>
+      </div>
 
       <div className="add-objects-section">
         <h2>Add Objects</h2>
