@@ -240,6 +240,25 @@ function App() {
     reader.readAsText(file);
   };
 
+  const deleteSelectedObject = () => {
+    if (!selectedObjectId) {
+      console.log("No object selected to delete!");
+      return;
+    }
+
+    const objectToDelete = sceneObjects.find(
+      (obj) => obj.id === selectedObjectId
+    );
+
+    setSceneObjects((prev) =>
+      prev.filter((obj) => obj.id !== selectedObjectId)
+    );
+
+    setSelectedObjectId(null);
+
+    console.log(`Deleted object:`, objectToDelete);
+  };
+
   return (
     <div className="App">
       <SceneCanvas
@@ -250,11 +269,13 @@ function App() {
       <ObjectsEditor
         onAddObject={addObject}
         selectedObject={selectedObject}
+        allObjects={sceneObjects}
         onMoveObject={moveSelectedObject}
         onRotateObject={rotateSelectedObject}
         onScaleObject={scaleSelectedObject}
         onSaveScene={saveScene}
         onLoadScene={loadScene}
+        onDeleteObject={deleteSelectedObject}
       />
     </div>
   );

@@ -1,5 +1,7 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { useRef } from "react";
+import * as THREE from "three";
 import type { SceneObject } from "../../App";
 
 interface SceneCanvasProps {
@@ -17,26 +19,60 @@ function Object3D({
   isSelected: boolean;
   onSelect: () => void;
 }) {
+  const outlineRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (outlineRef.current && isSelected) {
+      const time = state.clock.getElapsedTime();
+      const opacity = Math.sin(time * 4) * 0.3 + 0.7;
+      (outlineRef.current.material as THREE.MeshBasicMaterial).opacity =
+        opacity;
+    }
+  });
+
   return (
-    <mesh
-      position={object.position}
-      rotation={object.rotation}
-      scale={object.scale}
-      onClick={(e) => {
-        e.stopPropagation();
-        onSelect();
-      }}
-    >
-      {object.type === "cube" ? (
-        <boxGeometry args={[1, 1, 1]} />
-      ) : (
-        <sphereGeometry args={[0.5, 32, 32]} />
+    <group>
+      <mesh
+        position={object.position}
+        rotation={object.rotation}
+        scale={object.scale}
+        onClick={(e) => {
+          e.stopPropagation();
+          onSelect();
+        }}
+      >
+        {object.type === "cube" ? (
+          <boxGeometry args={[1, 1, 1]} />
+        ) : (
+          <sphereGeometry args={[0.5, 32, 32]} />
+        )}
+        <meshStandardMaterial
+          color={object.color}
+          emissive={isSelected ? "#111111" : "#000000"}
+        />
+      </mesh>
+
+      {isSelected && (
+        <mesh
+          ref={outlineRef}
+          position={object.position}
+          rotation={object.rotation}
+          scale={object.scale.map((s) => s * 1.05) as [number, number, number]} // Slightly larger
+        >
+          {object.type === "cube" ? (
+            <boxGeometry args={[1, 1, 1]} />
+          ) : (
+            <sphereGeometry args={[0.5, 32, 32]} />
+          )}
+          <meshBasicMaterial
+            color="#646cff"
+            transparent
+            opacity={0.7}
+            side={THREE.BackSide}
+          />
+        </mesh>
       )}
-      <meshStandardMaterial
-        color={object.color}
-        emissive={isSelected ? "#333333" : "#000000"}
-      />
-    </mesh>
+    </group>
   );
 }
 

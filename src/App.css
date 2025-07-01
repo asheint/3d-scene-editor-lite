@@ -7,8 +7,6 @@
   display: flex;
 }
 
-/* Objects Editor */
-
 .objects-editor {
   position: fixed;
   top: 0;
@@ -24,8 +22,7 @@
 }
 
 .objects-editor h1 {
-  margin-top: 0;
-  margin-bottom: 30px;
+  margin: 0 0 30px 0;
   font-size: 24px;
   color: #ffffff;
   text-align: center;
@@ -34,16 +31,62 @@
 }
 
 .objects-editor h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
+  margin: 0 0 15px 0;
   font-size: 18px;
   color: #ffffff;
 }
 
-/* Add Objects Section */
-
-.add-objects-section {
+.add-objects-section,
+.move-object-section,
+.rotate-object-section,
+.scale-object-section,
+.save-load-section {
   margin-bottom: 30px;
+}
+
+.load-scene-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #444;
+}
+
+.delete-controls {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.delete-btn {
+  width: 100%;
+  height: 40px;
+  background-color: #d32f2f;
+  border: 2px solid #b71c1c;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.delete-btn:hover {
+  background-color: #b71c1c;
+  border-color: #a5001a;
+  transform: translateY(-1px);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+}
+
+.warning-text {
+  font-size: 10px;
+  color: #ffab91;
+  margin: 8px 0 0 0;
+  line-height: 1.2;
 }
 
 .shapes-row {
@@ -79,17 +122,18 @@
   width: 35px;
   height: 35px;
   margin-bottom: 8px;
+  border: 2px solid;
 }
 
 .cube-icon {
   background-color: #ff6b35;
-  border: 2px solid #ff8c00;
+  border-color: #ff8c00;
   border-radius: 4px;
 }
 
 .sphere-icon {
   background-color: #4fc3f7;
-  border: 2px solid #29b6f6;
+  border-color: #29b6f6;
   border-radius: 50%;
 }
 
@@ -99,29 +143,28 @@
   text-align: center;
 }
 
-/* Movement Controls */
-
-.movement-controls {
+.movement-controls,
+.rotation-controls,
+.scale-controls,
+.save-load-controls,
+.load-controls {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.movement-grid {
+.movement-grid,
+.rotation-grid,
+.scale-grid {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 4px;
   align-items: center;
 }
 
-.axis-label {
-  font-size: 10px;
-  color: #007acc;
-  font-weight: bold;
-  text-align: center;
-}
-
-.arrow-btn {
+.arrow-btn,
+.rotate-btn,
+.scale-btn {
   width: 28px;
   height: 28px;
   background-color: #3c3c3c;
@@ -136,141 +179,43 @@
   justify-content: center;
 }
 
-.arrow-btn:hover {
-  background-color: #4c4c4c;
-  border-color: #007acc;
-  transform: translateY(-1px);
-}
-
-.arrow-btn:active {
-  transform: translateY(0);
-}
-
-.position-info {
-  font-size: 10px;
-  color: #999;
-  margin-top: 5px;
-}
-
-.move-object-section {
-  margin-bottom: 30px;
-}
-
-/* Rotate Object Section */
-
-.rotate-object-section {
-  margin-bottom: 30px;
-}
-
-.rotation-info {
-  font-size: 10px;
-  color: #999;
-  margin-top: 5px;
-}
-
-.rotation-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.rotation-grid {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 4px;
-  align-items: center;
-}
-
-.rotate-btn {
-  width: 28px;
-  height: 28px;
-  background-color: #3c3c3c;
-  border: 2px solid #555;
-  border-radius: 4px;
-  color: #ff9800;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.rotate-btn:hover {
-  background-color: #4c4c4c;
-  border-color: #ff9800;
-  transform: translateY(-1px);
-  color: #ffb74d;
-}
-
-.rotate-btn:active {
-  transform: translateY(0);
-}
-
-/* Scale Object Section */
-
-.scale-object-section {
-  margin-bottom: 30px;
-}
-
-.scale-info {
-  font-size: 10px;
-  color: #999;
-  margin-top: 5px;
-}
-
-.scale-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.scale-grid {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 4px;
-  align-items: center;
-}
-
-.scale-btn {
-  width: 28px;
-  height: 28px;
-  background-color: #3c3c3c;
-  border: 2px solid #555;
-  border-radius: 4px;
-  color: #4caf50;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+.arrow-btn:hover,
+.rotate-btn:hover,
 .scale-btn:hover {
   background-color: #4c4c4c;
-  border-color: #4caf50;
   transform: translateY(-1px);
-  color: #81c784;
 }
 
+.arrow-btn:active,
+.rotate-btn:active,
 .scale-btn:active {
   transform: translateY(0);
 }
 
-/* Save & Load Section */
-
-.save-load-section {
-  margin-bottom: 30px;
+.arrow-btn:hover {
+  border-color: #007acc;
 }
 
-.save-load-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.rotate-btn {
+  color: #ff9800;
 }
 
-.save-btn {
+.rotate-btn:hover {
+  border-color: #ff9800;
+  color: #ffb74d;
+}
+
+.scale-btn {
+  color: #4caf50;
+}
+
+.scale-btn:hover {
+  border-color: #4caf50;
+  color: #81c784;
+}
+
+.save-btn,
+.load-btn {
   width: 100%;
   height: 40px;
   background-color: #2196f3;
@@ -287,53 +232,29 @@
   gap: 8px;
 }
 
-.save-btn:hover {
+.save-btn:hover,
+.load-btn:hover {
   background-color: #1976d2;
   border-color: #1565c0;
   transform: translateY(-1px);
 }
 
-.save-btn:active {
-  transform: translateY(0);
-}
-
-/* Load Scene Section */
-
-.load-scene-section {
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #444;
-}
-
-.load-controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.load-btn {
-  width: 100%;
-  height: 40px;
-  background-color: #4caf50;
-  border: 2px solid #388e3c;
-  border-radius: 6px;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.load-btn:hover {
-  background-color: #388e3c;
-  border-color: #2e7d32;
-  transform: translateY(-1px);
-}
-
+.save-btn:active,
 .load-btn:active {
   transform: translateY(0);
+}
+
+.axis-label {
+  font-size: 10px;
+  color: #007acc;
+  font-weight: bold;
+  text-align: center;
+}
+
+.position-info,
+.rotation-info,
+.scale-info {
+  font-size: 10px;
+  color: #999;
+  margin-top: 5px;
 }

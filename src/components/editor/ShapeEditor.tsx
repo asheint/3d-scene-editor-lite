@@ -2,7 +2,10 @@ import type { SceneObject } from "../../App";
 
 interface ObjectsEditorProps {
   onAddObject: (type: "cube" | "sphere") => void;
+
   selectedObject: SceneObject | undefined;
+
+  allObjects: SceneObject[];
 
   onMoveObject: (
     direction: "left" | "right" | "forward" | "backward" | "up" | "down"
@@ -21,16 +24,20 @@ interface ObjectsEditorProps {
   onSaveScene: () => void;
 
   onLoadScene: (event: React.ChangeEvent<HTMLInputElement>) => void;
+
+  onDeleteObject: () => void;
 }
 
 export default function ObjectsEditor({
   onAddObject,
   selectedObject,
+  allObjects,
   onMoveObject,
   onRotateObject,
   onScaleObject,
   onSaveScene,
   onLoadScene,
+  onDeleteObject,
 }: ObjectsEditorProps) {
   const handleAddCube = () => {
     onAddObject("cube");
@@ -48,10 +55,10 @@ export default function ObjectsEditor({
     <div className="objects-editor">
       <h1>Objects Editor</h1>
 
-      <div className="load-scene-section">
-        <div className="load-controls">
+      <div className="save-load-section">
+        <div className="save-load-controls">
           <label htmlFor="load-scene-input" className="load-btn">
-            📁 Load Scene
+            Load Scene
             <input
               id="load-scene-input"
               type="file"
@@ -60,6 +67,25 @@ export default function ObjectsEditor({
               style={{ display: "none" }}
             />
           </label>
+
+          <button
+            className={`save-btn ${allObjects.length === 0 ? "disabled" : ""}`}
+            onClick={() => {
+              if (allObjects.length === 0) {
+                alert("Cannot save an empty scene. Add some objects first!");
+                return;
+              }
+              onSaveScene();
+            }}
+            disabled={allObjects.length === 0}
+            title={
+              allObjects.length === 0
+                ? "Add objects to save scene"
+                : "Export scene as JSON file"
+            }
+          >
+            Save Scene
+          </button>
         </div>
       </div>
 
@@ -87,11 +113,10 @@ export default function ObjectsEditor({
         </div>
       </div>
 
-      <div className="move-object-section">
-        <h2>Move Object</h2>
-
-        {selectedObject ? (
-          <>
+      {selectedObject ? (
+        <>
+          <div className="move-object-section">
+            <h2>Move Object</h2>
             <div className="selected-info">
               <p>Selected: {selectedObject.type}</p>
               <p className="position-info">
@@ -152,17 +177,10 @@ export default function ObjectsEditor({
                 </button>
               </div>
             </div>
-          </>
-        ) : (
-          <p className="no-selection">Click on an object to select it</p>
-        )}
-      </div>
+          </div>
 
-      <div className="rotate-object-section">
-        <h2>Rotate Object</h2>
-
-        {selectedObject ? (
-          <>
+          <div className="rotate-object-section">
+            <h2>Rotate Object</h2>
             <div className="selected-info">
               <p className="rotation-info">
                 Rotation: ({radiansToDegrees(selectedObject.rotation[0])}°,{" "}
@@ -222,17 +240,10 @@ export default function ObjectsEditor({
                 </button>
               </div>
             </div>
-          </>
-        ) : (
-          <p className="no-selection">Click on an object to select it</p>
-        )}
-      </div>
+          </div>
 
-      <div className="scale-object-section">
-        <h2>Scale Object</h2>
-
-        {selectedObject ? (
-          <>
+          <div className="scale-object-section">
+            <h2>Scale Object</h2>
             <div className="selected-info">
               <p className="scale-info">
                 Scale: ({selectedObject.scale[0].toFixed(1)},{" "}
@@ -292,25 +303,32 @@ export default function ObjectsEditor({
                 </button>
               </div>
             </div>
-          </>
-        ) : (
-          <p className="no-selection">Click on an object to select it</p>
-        )}
-      </div>
+          </div>
 
-      <div className="save-load-section">
-        <h2>Save & Load</h2>
-
-        <div className="save-load-controls">
-          <button
-            className="save-btn"
-            onClick={onSaveScene}
-            title="Export scene as JSON file"
-          >
-            💾 Save Scene
-          </button>
+          <div className="delete-object-section">
+            <div className="delete-controls">
+              <button
+                className="delete-btn"
+                onClick={onDeleteObject}
+                title="Delete selected object"
+              >
+                Delete Object
+              </button>
+              <div className="selected-info">
+                <p className="warning-text">⚠️ This action cannot be undone</p>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="no-selection-section">
+          <h2>Object Controls</h2>
+          <p className="no-selection">
+            Click on an object to select it and access move, rotate, scale, and
+            delete controls.
+          </p>
         </div>
-      </div>
+      )}
     </div>
   );
 }
