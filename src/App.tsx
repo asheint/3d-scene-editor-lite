@@ -171,6 +171,34 @@ function App() {
     (obj) => obj.id === selectedObjectId
   );
 
+  const saveScene = () => {
+    // Step 1: Convert our scene objects to JSON string
+    const sceneData = {
+      version: "1.0", // Good practice to include version
+      timestamp: new Date().toISOString(), // When it was saved
+      objects: sceneObjects, // Our actual scene data
+    };
+
+    const jsonString = JSON.stringify(sceneData, null, 2); // The '2' makes it pretty/readable
+
+    // Step 2: Create a downloadable file
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    // Step 3: Create a temporary download link and click it
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `scene_${Date.now()}.json`; // Filename with timestamp
+    document.body.appendChild(link);
+    link.click();
+
+    // Step 4: Clean up
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    console.log("Scene saved!", sceneData);
+  };
+
   return (
     <div className="App">
       <SceneCanvas
@@ -184,6 +212,7 @@ function App() {
         onMoveObject={moveSelectedObject}
         onRotateObject={rotateSelectedObject}
         onScaleObject={scaleSelectedObject}
+        onSaveScene={saveScene}
       />
     </div>
   );

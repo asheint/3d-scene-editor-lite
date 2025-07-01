@@ -17,6 +17,8 @@ interface ObjectsEditorProps {
     axis: "x" | "y" | "z",
     direction: "increase" | "decrease"
   ) => void;
+
+  onSaveScene: () => void;
 }
 
 export default function ObjectsEditor({
@@ -25,6 +27,7 @@ export default function ObjectsEditor({
   onMoveObject,
   onRotateObject,
   onScaleObject,
+  onSaveScene,
 }: ObjectsEditorProps) {
   const handleAddCube = () => {
     onAddObject("cube");
@@ -275,6 +278,20 @@ export default function ObjectsEditor({
         ) : (
           <p className="no-selection">Click on an object to select it</p>
         )}
+      </div>
+
+      <div className="save-load-section">
+        <h2>Save & Load</h2>
+
+        <div className="save-load-controls">
+          <button
+            className="save-btn"
+            onClick={onSaveScene}
+            title="Export scene as JSON file"
+          >
+            💾 Save Scene
+          </button>
+        </div>
       </div>
     </div>
   );
