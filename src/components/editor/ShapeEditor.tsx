@@ -1,10 +1,14 @@
-export default function ObjectsEditor() {
+interface ObjectsEditorProps {
+  onAddObject: (type: 'cube' | 'sphere') => void
+}
+
+export default function ObjectsEditor({ onAddObject }: ObjectsEditorProps) {
   const handleAddCube = () => {
-    console.log("Adding cube!")
+    onAddObject('cube')
   }
 
   const handleAddSphere = () => {
-    console.log("Adding sphere!")
+    onAddObject('sphere')
   }
 
   return (
