@@ -2,6 +2,12 @@
 
 A lightweight 3D scene editor built with React Three Fiber, TypeScript, and Vite that allows users to create, manipulate, and manage basic 3D scenes.
 
+## Demo Screenshot
+
+![3D Scene Editor Demo](./public/demo-ss.png)
+
+_Interactive 3D scene editor with object manipulation controls_
+
 ## Features
 
 ### Core Functionality
