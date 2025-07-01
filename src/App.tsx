@@ -129,14 +129,12 @@ function App() {
       return;
     }
 
-    const scaleStep = 0.1; // How much to scale each time
-
+    const scaleStep = 0.1;
     setSceneObjects((prev) =>
       prev.map((obj) => {
         if (obj.id === selectedObjectId) {
           const newScale: [number, number, number] = [...obj.scale];
 
-          // Figure out which axis to scale (0=X, 1=Y, 2=Z)
           let axisIndex: number;
           if (axis === "x") {
             axisIndex = 0;
@@ -146,12 +144,10 @@ function App() {
             axisIndex = 2;
           }
 
-          // Increase or decrease the scale
           if (direction === "increase") {
             newScale[axisIndex] += scaleStep;
           } else {
             newScale[axisIndex] -= scaleStep;
-            // Don't let it go below 0.1 (too small)
             if (newScale[axisIndex] < 0.1) {
               newScale[axisIndex] = 0.1;
             }

@@ -1,5 +1,6 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import GroundPlane from "./GroundPlane";
 import { useRef } from "react";
 import * as THREE from "three";
 import type { SceneObject } from "../../App";
@@ -40,6 +41,8 @@ function Object3D({
           e.stopPropagation();
           onSelect();
         }}
+        castShadow
+        receiveShadow
       >
         {object.type === "cube" ? (
           <boxGeometry args={[1, 1, 1]} />
@@ -89,9 +92,26 @@ export default function SceneCanvas({
         marginRight: "250px",
       }}
     >
-      <Canvas camera={{ position: [5, 5, 5], fov: 60 }}>
+      <Canvas
+        shadows
+        camera={{ position: [5, 5, 5], fov: 60 }}
+        gl={{ antialias: true }}
+      >
         <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
+        <directionalLight
+          position={[10, 10, 5]}
+          intensity={1}
+          castShadow
+          shadow-mapSize={[2048, 2048]}
+          shadow-camera-far={50}
+          shadow-camera-left={-15}
+          shadow-camera-right={15}
+          shadow-camera-top={15}
+          shadow-camera-bottom={-15}
+          shadow-camera-near={0.1}
+        />
+
+        <GroundPlane />
 
         <OrbitControls enablePan enableZoom enableRotate />
 
