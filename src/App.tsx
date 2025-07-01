@@ -13,28 +13,84 @@ export interface SceneObject {
 }
 
 function App() {
-  // This is the array to store of all objects in the scene
   const [sceneObjects, setSceneObjects] = useState<SceneObject[]>([])
+  const [selectedObjectId, setSelectedObjectId] = useState<string | null>(null)
 
-  // add a new object
   const addObject = (type: 'cube' | 'sphere') => {
     const newObject: SceneObject = {
-      id: `${type}_${Date.now()}`, // Unique ID using current time
+      id: `${type}_${Date.now()}`,
       type: type,
-      position: [0, 0, 0], 
-      rotation: [0, 0, 0], 
-      scale: [1, 1, 1],  
-      color: type === 'cube' ? '#ff6b35' : '#4fc3f7' 
+      position: [0, 0, 0],
+      rotation: [0, 0, 0],
+      scale: [1, 1, 1],
+      color: type === 'cube' ? '#ff6b35' : '#4fc3f7'
     }
 
     setSceneObjects(prev => [...prev, newObject])
+    setSelectedObjectId(newObject.id)
     console.log(`Added ${type}!`, newObject)
   }
 
+  const selectObject = (objectId: string) => {
+    setSelectedObjectId(objectId)
+    console.log(`Selected object: ${objectId}`)
+  }
+
+  const moveSelectedObject = (direction: 'left' | 'right' | 'forward' | 'backward' | 'up' | 'down') => {
+    if (!selectedObjectId) {
+      console.log('No object selected!')
+      return
+    }
+
+    setSceneObjects(prev => 
+      prev.map(obj => {
+        if (obj.id === selectedObjectId) {
+          const newPosition: [number, number, number] = [...obj.position]
+          
+          switch (direction) {
+            case 'right':
+              newPosition[0] += 1
+              break
+            case 'left':
+              newPosition[0] -= 1
+              break
+            case 'up':
+              newPosition[1] += 1
+              break
+            case 'down':
+              newPosition[1] -= 1
+              break
+            case 'forward':
+              newPosition[2] -= 1
+              break
+            case 'backward':
+              newPosition[2] += 1
+              break
+          }
+          
+          return { ...obj, position: newPosition }
+        }
+        return obj
+      })
+    )
+    
+    console.log(`Moved ${direction}`)
+  }
+
+  const selectedObject = sceneObjects.find(obj => obj.id === selectedObjectId)
+
   return (
     <div className="App">
-      <SceneCanvas objects={sceneObjects} />
-      <ObjectsEditor onAddObject={addObject} />
+      <SceneCanvas 
+        objects={sceneObjects} 
+        selectedObjectId={selectedObjectId}
+        onSelectObject={selectObject}
+      />
+      <ObjectsEditor 
+        onAddObject={addObject}
+        selectedObject={selectedObject}
+        onMoveObject={moveSelectedObject}
+      />
     </div>
   )
 }

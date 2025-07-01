@@ -4,27 +4,39 @@ import type { SceneObject } from '../../App'
 
 interface SceneCanvasProps {
   objects: SceneObject[]
+  selectedObjectId: string | null
+  onSelectObject: (objectId: string) => void
 }
 
-// Component to render a single 3D object
-function Object3D({ object }: { object: SceneObject }) {
+function Object3D({ object, isSelected, onSelect }: { 
+  object: SceneObject
+  isSelected: boolean
+  onSelect: () => void 
+}) {
   return (
     <mesh 
       position={object.position}
       rotation={object.rotation}
       scale={object.scale}
+      onClick={(e) => {
+        e.stopPropagation() 
+        onSelect()
+      }}
     >
       {object.type === 'cube' ? (
         <boxGeometry args={[1, 1, 1]} />
       ) : (
         <sphereGeometry args={[0.5, 32, 32]} />
       )}
-      <meshStandardMaterial color={object.color} />
+      <meshStandardMaterial 
+        color={object.color} 
+        emissive={isSelected ? '#333333' : '#000000'}
+      />
     </mesh>
   )
 }
 
-export default function SceneCanvas({ objects }: SceneCanvasProps) {
+export default function SceneCanvas({ objects, selectedObjectId, onSelectObject }: SceneCanvasProps) {
   return (
     <div style={{ 
       width: 'calc(100vw - 250px)',
@@ -38,9 +50,13 @@ export default function SceneCanvas({ objects }: SceneCanvasProps) {
         <OrbitControls enablePan enableZoom enableRotate />
         
         {objects.map(object => (
-          <Object3D key={object.id} object={object} />
+          <Object3D 
+            key={object.id} 
+            object={object}
+            isSelected={object.id === selectedObjectId}
+            onSelect={() => onSelectObject(object.id)}
+          />
         ))}
-        
       </Canvas>
     </div>
   )
